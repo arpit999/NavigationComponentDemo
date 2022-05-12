@@ -54,10 +54,6 @@
             android:name="recipient"
             app:argType="string" />
 
-        <argument
-            android:name="money"
-            app:argType="com.temicanada.navigationcomponentdemo.model.Money" />
-
     </fragment>
     <fragment
         android:id="@+id/viewBalanceFragment"

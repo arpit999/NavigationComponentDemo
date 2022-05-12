@@ -13,9 +13,12 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputEditText
 import com.temicanada.navigationcomponentdemo.R
 import com.temicanada.navigationcomponentdemo.model.Money
+import org.w3c.dom.Text
 import java.math.BigDecimal
 
 
@@ -23,7 +26,9 @@ class SpecifyAmountFragment : Fragment(R.layout.fragment_specify_amount), View.O
 
     private lateinit var navController: NavController
     private lateinit var input_amount: TextInputEditText
+    private lateinit var recipientTextView: TextView
 
+    private val args: SpecifyAmountFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +37,9 @@ class SpecifyAmountFragment : Fragment(R.layout.fragment_specify_amount), View.O
         view.findViewById<Button>(R.id.send_btn).setOnClickListener(this)
         view.findViewById<Button>(R.id.cancel_btn).setOnClickListener(this)
         input_amount = view.findViewById(R.id.input_amount)
+        recipientTextView = view.findViewById(R.id.recipient)
+
+        recipientTextView.text = "Send money to ${args.recipient}"
 
     }
 
@@ -39,7 +47,12 @@ class SpecifyAmountFragment : Fragment(R.layout.fragment_specify_amount), View.O
         when (p0!!.id) {
             R.id.send_btn -> {
                 if (!TextUtils.isEmpty(input_amount.text.toString())) {
-                    navController.navigate(R.id.action_specifyAmountFragment_to_conformationFragment)
+                    val action =
+                        SpecifyAmountFragmentDirections.actionSpecifyAmountFragmentToConformationFragment(
+                            args.recipient,
+                            Money(input_amount.text.toString().toBigDecimal())
+                        )
+                    findNavController().navigate(action)
                 } else {
                     Toast.makeText(activity, "Please enter amount ", Toast.LENGTH_SHORT).show()
                 }

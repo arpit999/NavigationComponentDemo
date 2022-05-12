@@ -11,19 +11,18 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.temicanada.navigationcomponentdemo.R
 
 
 class ChooseRecipientFragment : Fragment(R.layout.fragment_choose_recipient), View.OnClickListener {
 
-    lateinit var navController: NavController
     private lateinit var input_recipient: TextInputEditText
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        navController = Navigation.findNavController(view)
         view.findViewById<Button>(R.id.next_btn).setOnClickListener(this)
         view.findViewById<Button>(R.id.cancel_btn).setOnClickListener(this)
         input_recipient = view.findViewById(R.id.input_recipient)
@@ -34,7 +33,11 @@ class ChooseRecipientFragment : Fragment(R.layout.fragment_choose_recipient), Vi
             R.id.next_btn -> {
 
                 if (!TextUtils.isEmpty(input_recipient.text.toString())) {
-                    navController.navigate(R.id.action_chooseRecipientFragment_to_specifyAmountFragment)
+                    val action =
+                        ChooseRecipientFragmentDirections.actionChooseRecipientFragmentToSpecifyAmountFragment(
+                            input_recipient.text.toString()
+                        )
+                    findNavController().navigate(action)
                 } else {
                     Toast.makeText(activity, "Please enter recipient", Toast.LENGTH_SHORT).show()
                 }
